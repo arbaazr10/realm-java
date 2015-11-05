@@ -90,18 +90,7 @@ if (ext.debugBuild) {
 }
 if (ext.coreSourcePath) {
     // Run the "sh build.sh get-version" to get the core version.
-    new ByteArrayOutputStream().withStream { os ->
-        def result = exec {
-            workingDir = coreSourcePath
-            commandLine = [
-                    "bash",
-                    "build.sh",
-                    "get-version"
-            ]
-            standardOutput = os
-        }
-        ext.coreVersion = os.toString().trim()
-    }
+    ext.coreVersion = "sh build.sh get-version".execute([], file(coreSourcePath)).text.trim()
 }
 
 def getNdk() {
