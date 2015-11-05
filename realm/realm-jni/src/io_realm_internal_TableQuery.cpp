@@ -70,6 +70,9 @@ JNIEXPORT jstring JNICALL Java_io_realm_internal_TableQuery_nativeValidateQuery
 #define RELEASE_ARRAY() \
     env->ReleaseLongArrayElements(columnIndexes, arr, 0);
 
+#define ABORT_ARRAY() \
+    env->ReleaseLongArrayElements(columnIndexes, arr, JNI_ABORT);
+
 // Return TableRef used for build link queries
 TableRef getTableForLinkQuery(jlong nativeQueryPtr, jlong *arr, jsize arr_len) {
     TableRef table_ref = Q(nativeQueryPtr)->get_table();
@@ -128,7 +131,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeEqual__J_3JJ(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Int))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->equal(S(arr[0]), static_cast<int64_t>(value));
         }
         else {
@@ -146,7 +152,10 @@ JNIEXPORT void JNICALL JNICALL Java_io_realm_internal_TableQuery_nativeNotEqual_
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Int))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->not_equal(S(arr[0]), static_cast<int64_t>(value));
         }
         else {
@@ -164,7 +173,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreater__J_3JJ(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Int))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater(S(arr[0]), static_cast<int64_t>(value));
         }
         else {
@@ -182,7 +194,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreaterEqual__J_3
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Int))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater_equal(S(arr[0]), static_cast<int64_t>(value));
         }
         else {
@@ -200,7 +215,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLess__J_3JJ(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Int))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less(S(arr[0]), static_cast<int64_t>(value));
         }
         else {
@@ -218,7 +236,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLessEqual__J_3JJ(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Int))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less_equal(S(arr[0]), static_cast<int64_t>(value));
         }
         else {
@@ -235,7 +256,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeBetween__J_3JJJ(
     GET_ARRAY()
     if (arr_len == 1) {
         if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Int))
+        {
+            ABORT_ARRAY()
             return;
+        }
         try {
             Q(nativeQueryPtr)->between(S(arr[0]), static_cast<int64_t>(value1), static_cast<int64_t>(value2));
         } CATCH_STD()
@@ -255,7 +279,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeEqual__J_3JF(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Float))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->equal(S(arr[0]), static_cast<float>(value));
         }
         else {
@@ -273,7 +300,10 @@ JNIEXPORT void JNICALL JNICALL Java_io_realm_internal_TableQuery_nativeNotEqual_
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Float))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->not_equal(S(arr[0]), static_cast<float>(value));
         }
         else {
@@ -291,7 +321,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreater__J_3JF(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Float))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater(S(arr[0]), static_cast<float>(value));
         }
         else {
@@ -309,7 +342,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreaterEqual__J_3
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Float))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater_equal(S(arr[0]), static_cast<float>(value));
         }
         else {
@@ -327,7 +363,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLess__J_3JF(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Float))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less(S(arr[0]), static_cast<float>(value));
         }
         else {
@@ -345,7 +384,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLessEqual__J_3JF(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Float))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less_equal(S(arr[0]), static_cast<float>(value));
         }
         else {
@@ -363,7 +405,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeBetween__J_3JFF(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Float))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->between(S(arr[0]), static_cast<float>(value1), static_cast<float>(value2));
         }
         else {
@@ -383,7 +428,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeEqual__J_3JD(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Double))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->equal(S(arr[0]), static_cast<double>(value));
         }
         else {
@@ -401,7 +449,10 @@ JNIEXPORT void JNICALL JNICALL Java_io_realm_internal_TableQuery_nativeNotEqual_
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Double))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->not_equal(S(arr[0]), static_cast<double>(value));
         }
         else {
@@ -419,7 +470,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreater__J_3JD(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Double))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater(S(arr[0]), static_cast<double>(value));
         }
         else {
@@ -437,7 +491,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreaterEqual__J_3
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Double))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater_equal(S(arr[0]), static_cast<double>(value));
         }
         else {
@@ -455,7 +512,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLess__J_3JD(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Double))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less(S(arr[0]), static_cast<double>(value));
         }
         else {
@@ -473,7 +533,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLessEqual__J_3JD(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Double))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less_equal(S(arr[0]), static_cast<double>(value));
         }
         else {
@@ -491,7 +554,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeBetween__J_3JDD(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Double))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->between(S(arr[0]), static_cast<double>(value1), static_cast<double>(value2));
         }
         else {
@@ -511,7 +577,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeEqualDateTime(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_DateTime))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->equal_datetime(S(arr[0]), DateTime(value));
         }
         else {
@@ -530,7 +599,10 @@ JNIEXPORT void JNICALL JNICALL Java_io_realm_internal_TableQuery_nativeNotEqualD
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_DateTime))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->not_equal_datetime(S(arr[0]), DateTime(value));
         }
         else {
@@ -549,7 +621,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreaterDateTime(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_DateTime))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater_datetime(S(arr[0]), DateTime(value));
         }
         else {
@@ -567,7 +642,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeGreaterEqualDateT
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_DateTime))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->greater_equal_datetime(S(arr[0]), DateTime(value));
         }
         else {
@@ -585,7 +663,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLessDateTime(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_DateTime))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less_datetime(S(arr[0]), DateTime(value));
         }
         else {
@@ -603,7 +684,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeLessEqualDateTime
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_DateTime))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->less_equal_datetime(S(arr[0]), DateTime(value));
         }
         else {
@@ -621,7 +705,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeBetweenDateTime(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_DateTime))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->between_datetime(S(arr[0]), DateTime(value1), DateTime(value2));
         }
         else {
@@ -640,7 +727,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeEqual__J_3JZ(
     try {
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_Bool))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             Q(nativeQueryPtr)->equal(S(arr[0]), value != 0 ? true : false);
         }
         else {
@@ -673,7 +763,10 @@ void TableQuery_StringPredicate(JNIEnv *env, jlong nativeQueryPtr, jlongArray co
         JStringAccessor value2(env, value); // throws
         if (arr_len == 1) {
             if (!QUERY_COL_TYPE_VALID(env, nativeQueryPtr, arr[0], type_String))
+            {
+                ABORT_ARRAY()
                 return;
+            }
             switch (predicate) {
             case StringEqual:
                 Q(nativeQueryPtr)->equal(S(arr[0]), value2, is_case_sensitive);
@@ -1055,14 +1148,20 @@ JNIEXPORT jlong JNICALL Java_io_realm_internal_TableQuery_nativeFindAllMultiSort
 
           if (arr_len == 0) {
               ThrowException(env, IllegalArgument, "You must provide at least one field name.");
+              env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+              env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
               return 0;
           }
           if (asc_len == 0) {
               ThrowException(env, IllegalArgument, "You must provide at least one sort order.");
+              env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+              env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
               return 0;
           }
           if (arr_len != asc_len) {
               ThrowException(env, IllegalArgument, "Number of fields and sort orders do not match.");
+              env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+              env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
               return 0;
           }
 
@@ -1071,7 +1170,11 @@ JNIEXPORT jlong JNICALL Java_io_realm_internal_TableQuery_nativeFindAllMultiSort
           TableRef table = query->get_table();
 
           if (!QUERY_VALID(env, query.get()) || !ROW_INDEXES_VALID(env, table.get(), start, end, limit))
+          {
+              env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+              env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
               return 0;
+          }
 
           // run the query
           TableView tableView( query->find_all(S(start), S(end), S(limit)) );
@@ -1082,7 +1185,11 @@ JNIEXPORT jlong JNICALL Java_io_realm_internal_TableQuery_nativeFindAllMultiSort
 
           for (int i = 0; i < arr_len; ++i) {
               if (!COL_INDEX_VALID(env, &tableView, long_arr[i]))
+              {
+                  env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+                  env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
                   return -1;
+              }
               int colType = tableView.get_column_type( S(long_arr[i]) );
               switch (colType) {
                   case type_Bool:
@@ -1096,6 +1203,8 @@ JNIEXPORT jlong JNICALL Java_io_realm_internal_TableQuery_nativeFindAllMultiSort
                       break;
                   default:
                       ThrowException(env, IllegalArgument, ERR_SORT_NOT_SUPPORTED);
+                      env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+                      env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
                       return 0;
               }
           }
@@ -1430,7 +1539,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsNull(
         jlong column_idx = arr[arr_len-1];
         TableRef table_ref = getTableByArray(nativeQueryPtr, arr, arr_len);
         if (!TBL_AND_COL_NULLABLE(env, table_ref.get(), column_idx))
+        {
+            ABORT_ARRAY()
             return;
+        }
 
         int col_type = table_ref->get_column_type(S(column_idx));
         if (arr_len == 1) {
@@ -1456,6 +1568,7 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsNull(
                 default:
                     // this point is unreachable
                     ThrowException(env, FatalError, "This is not reachable.");
+                    ABORT_ARRAY()
                     return;
             }
         } else {
@@ -1491,7 +1604,8 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsNull(
                 default:
                     // this point is unreachable
                     ThrowException(env, FatalError, "This is not reachable.");
-                    return ;
+                    ABORT_ARRAY()
+                    return;
             }
         }
     } CATCH_STD()
@@ -1572,7 +1686,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsNotNull
         TableRef table_ref = getTableByArray(nativeQueryPtr, arr, arr_len);
 
         if (!TBL_AND_COL_NULLABLE(env, table_ref.get(), column_idx))
+        {
+            ABORT_ARRAY()
             return;
+        }
 
         int col_type = table_ref->get_column_type(S(column_idx));
         if (arr_len == 1) {
@@ -1598,6 +1715,7 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsNotNull
                 default:
                     // this point is unreachable
                     ThrowException(env, FatalError, "This is not reachable.");
+                    ABORT_ARRAY()
                     return;
             }
         }
@@ -1634,7 +1752,8 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsNotNull
                 default:
                     // this point is unreachable
                     ThrowException(env, FatalError, "This is not reachable.");
-                    return ;
+                    ABORT_ARRAY()
+                    return;
             }
         }
     } CATCH_STD()
@@ -1672,6 +1791,8 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsEmpty
                 case type_DateTime:
                 default:
                     ThrowException(env, IllegalArgument, "isEmpty() only works on String, byte[] and RealmList.");
+                    ABORT_ARRAY()
+                    return;
             }
         }
         else {
@@ -1694,12 +1815,10 @@ JNIEXPORT void JNICALL Java_io_realm_internal_TableQuery_nativeIsEmpty
                 case type_DateTime:
                 default:
                     ThrowException(env, IllegalArgument, "isEmpty() only works on String, byte[] and RealmList across links.");
+                    ABORT_ARRAY()
+                    return;
             }
         }
     } CATCH_STD()
     RELEASE_ARRAY()
 }
-
-
-
-

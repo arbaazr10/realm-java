@@ -306,6 +306,7 @@ JNIEXPORT void JNICALL Java_io_realm_internal_UncheckedRow_nativeSetByteArray
     if (!ROW_VALID(env, ROW(nativeRowPtr)))
         return;
 
+    jbyte* bytePtr = NULL;
     try {
         if (value == NULL) {
             if (!(ROW(nativeRowPtr)->get_table()->is_nullable(S(columnIndex)))) {
@@ -315,7 +316,7 @@ JNIEXPORT void JNICALL Java_io_realm_internal_UncheckedRow_nativeSetByteArray
             ROW(nativeRowPtr)->set_binary(S(columnIndex), BinaryData());
         }
         else {
-            jbyte* bytePtr = env->GetByteArrayElements(value, NULL);
+            bytePtr = env->GetByteArrayElements(value, NULL);
             if (!bytePtr) {
                 ThrowException(env, IllegalArgument, "doByteArray");
                 return;
@@ -323,8 +324,13 @@ JNIEXPORT void JNICALL Java_io_realm_internal_UncheckedRow_nativeSetByteArray
             size_t dataLen = S(env->GetArrayLength(value));
             ROW(nativeRowPtr)->set_binary( S(columnIndex), BinaryData(reinterpret_cast<char*>(bytePtr), dataLen));
             env->ReleaseByteArrayElements(value, bytePtr, 0);
+            bytePtr = NULL;
         }
     } CATCH_STD()
+
+    if (bytePtr) {
+        env->ReleaseByteArrayElements(value, bytePtr, JNI_ABORT);
+    }
 }
 
 JNIEXPORT void JNICALL Java_io_realm_internal_UncheckedRow_nativeSetMixed

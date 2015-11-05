@@ -1390,7 +1390,11 @@ JNIEXPORT jlong JNICALL Java_io_realm_internal_Table_nativeGetSortedViewMulti(
 
     for (int i = 0; i < arr_len; ++i) {
         if (!TBL_AND_COL_INDEX_VALID(env, pTable, S(long_arr[i]) ))
+        {
+            env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+            env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
             return 0;
+        }
         int colType = pTable->get_column_type( S(long_arr[i]) );
         switch (colType) {
             case type_Int:
@@ -1404,6 +1408,8 @@ JNIEXPORT jlong JNICALL Java_io_realm_internal_Table_nativeGetSortedViewMulti(
                 break;
             default:
                 ThrowException(env, IllegalArgument, "Sort is currently only supported on integer, boolean, double, float, String, and Date columns.");
+                env->ReleaseLongArrayElements(columnIndices, long_arr, JNI_ABORT);
+                env->ReleaseBooleanArrayElements(ascending, bool_arr, JNI_ABORT);
                 return 0;
         }
     }
