@@ -123,19 +123,11 @@ def getNdk() {
 }
 
 def getStrippedExt() {
-    if (stripSymbols) {
-        return "-stripped"
-    } else {
-        return ""
-    }
+    return stripSymbols ? "-stripped" : ""
 }
 
 def getDebugExt() {
-    if (debugBuild) {
-        return "-dbg"
-    } else {
-        return ""
-    }
+    return debugBuild ? "-dbg" : ""
 }
 
 ext.coreArchiveFile = rootProject.file("../core-android-${project.coreVersion}.tar.gz")
@@ -219,13 +211,9 @@ task compileCore(group: 'build setup', description: 'Compile the core library fr
 
     // Copy the core tar ball
     doLast {
-        println "${coreSourcePath}/realm-core-android-${coreVersion}.tar.gz"
-        println project.coreArchiveFile.getParent()
-        println "realm-core-android-${coreVersion}.tar.gz"
-        println "core-android-${coreVersion}.tar.gz"
         copy {
             from "${coreSourcePath}/realm-core-android-${coreVersion}.tar.gz"
-            into project.coreArchiveFile.getParent()
+            into project.coreArchiveFile.parent
             rename "realm-core-android-${coreVersion}.tar.gz", "core-android-${coreVersion}.tar.gz"
         }
     }
