@@ -304,7 +304,7 @@ targets.each { target ->
         copy {
             from "${projectDir}/src/librealm-jni-${target.name}${getDebugExt()}${getStrippedExt()}.so"
             into "${projectDir}/../realm-library/src/main/jniLibs/${target.jniFolder}"
-            rename "librealm-jni-${target.name}${getDebugExt()}${getStrippedExt()}", 'librealm-jni.so'
+            rename "librealm-jni-${target.name}${getDebugExt()}${getStrippedExt()}.so", 'librealm-jni.so'
         }
 
         // Store the unstripped version
