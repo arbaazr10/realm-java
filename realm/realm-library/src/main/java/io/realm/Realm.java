@@ -137,6 +137,10 @@ public final class Realm extends BaseRealm {
     private final Map<Class<? extends RealmObject>, Table> classToTable =
             new HashMap<Class<? extends RealmObject>, Table>();
 
+    // Reference count on currently opened Realm instances.
+    // We need to know if all Realm instance of all threads are closed in order to clean up validatedRealmFiles.
+    private static final Map<String, Integer> realmFileReferenceCounter = new HashMap<String, Integer>();
+
     private static RealmConfiguration defaultConfiguration;
     protected ColumnIndices columnIndices;
     /**
@@ -291,6 +295,8 @@ public final class Realm extends BaseRealm {
 
             // Increment global reference counter
             realm.acquireFileReference(configuration);
+            // Increment Realm file reference counter
+            acquireRealmFileReference(configuration);
 
             // Check versions of Realm
             long currentVersion = realm.getVersion();
@@ -1154,7 +1160,11 @@ public final class Realm extends BaseRealm {
     protected void lastLocalInstanceClosed() {
         // validatedRealmFiles must not modified while other thread is executing createAndValidate()
         synchronized (BaseRealm.class) {
-            validatedRealmFiles.remove(configuration.getPath());
+            // All Realm instances with this file have been closed. Decrease the counter.
+            releaseRealmFileReference(configuration);
+            if (realmFileReferenceCounter.get(configuration.getPath()) == null) {
+                validatedRealmFiles.remove(configuration.getPath());
+            }
         }
         realmsCache.get().remove(configuration);
     }
@@ -1265,6 +1275,37 @@ public final class Realm extends BaseRealm {
             throw new RealmException("Could not create an instance of " + moduleName, e);
         } catch (IllegalAccessException e) {
             throw new RealmException("Could not create an instance of " + moduleName, e);
+        }
+    }
+
+    /**
+     * Acquire a reference to the given Realm file.
+     * This function call should be called in synchronized block on BaseRealm.class
+     */
+    private static void acquireRealmFileReference(RealmConfiguration configuration) {
+        String path = configuration.getPath();
+        Integer refCount = realmFileReferenceCounter.get(path);
+        if (refCount == null) {
+            refCount = 0;
+        }
+        realmFileReferenceCounter.put(path, refCount + 1);
+    }
+
+    /**
+     * Releases a reference to the Realm file. If reference count reaches 0 any cached configurations
+     * will be removed.
+     * This function call should be called in synchronized block on BaseRealm.class
+     */
+    private static void releaseRealmFileReference(RealmConfiguration configuration) {
+        String path = configuration.getPath();
+        Integer refCount = realmFileReferenceCounter.get(path);
+        if (refCount == null || refCount == 0) {
+            throw new IllegalStateException("Trying to release a Realm file that is already closed");
+        }
+        if (refCount == 1) {
+            realmFileReferenceCounter.remove(path);
+        } else {
+            realmFileReferenceCounter.put(path, refCount - 1);
         }
     }
 
