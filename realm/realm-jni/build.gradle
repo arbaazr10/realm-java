@@ -221,11 +221,7 @@ task compileCore(group: 'build setup', description: 'Compile the core library fr
 
 task deployCore(group: 'build setup', description: 'Deploy the latest version of realm core') {
     dependsOn {
-        if (coreSourcePath) {
-            compileCore
-        } else {
-            downloadCore
-        }
+        coreSourcePath ? compileCore : downloadCore
     }
 
     outputs.upToDateWhen {
